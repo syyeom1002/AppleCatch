@@ -6,6 +6,9 @@ TagManager:
   tags:
   - apple
   - bomb
+  - pinkbasket
+  - mintbasket
+  - purplebasket
   layers:
   - Default
   - TransparentFX

@@ -9,12 +9,22 @@ public class BasketController : MonoBehaviour
     private AudioClip appleSfx;
     [SerializeField]
     private AudioClip bombSfx;
-
-    public GameDirector gameDirector;
+    [SerializeField]
+    private GameDirector gameDirector;
     // Start is called before the first frame update
+    private void Awake()
+    {
+        Debug.Log("<color=cyan>Awake</color>");
+        GameObject gameDirectorGo = GameObject.Find("GameDirector");
+        Debug.LogFormat("Awake:{0}", gameDirectorGo);
+        this.gameDirector = gameDirectorGo.GetComponent<GameDirector>();
+        Debug.LogFormat("gameDirector:{0}", gameDirector);
+    }
     void Start()
     {
         this.audioSource = this.GetComponent<AudioSource>();
+
+
     }
 
     // Update is called once per frame
@@ -41,6 +51,7 @@ public class BasketController : MonoBehaviour
                 float z = Mathf.RoundToInt(hit.point.z);
                 //새로운 좌표를 만든다
                 this.transform.position=new Vector3(x, 0, z);
+                Debug.LogFormat("position:{0}", this.transform.position);
             }
         }
 
@@ -51,16 +62,20 @@ public class BasketController : MonoBehaviour
         if (other.tag == "apple")
         {
             Debug.Log("점수추가");
+            
             this.audioSource.PlayOneShot(this.appleSfx);
             this.gameDirector.IncreaseScore(100);
+            Destroy(other.gameObject);
         }
-        else
+        else if(other.tag=="bomb")
         {
             Debug.Log("감점");
+            
             this.audioSource.PlayOneShot(this.bombSfx);
             this.gameDirector.DecreaseScore(50);
+            Destroy(other.gameObject);
         }
         this.gameDirector.UpdateScoreUI();
-        Destroy(other.gameObject);
+        
     }
 }
